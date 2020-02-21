@@ -6,7 +6,7 @@ on:
       - dev
 
     paths:
-      - "ops/ci/scripts/prepare.sh"
+      - "scripts/**"
       - ".github/workflows/dev.yaml"
       - "tests/**"
 
