@@ -135,11 +135,13 @@ if [ -z "$CI_K8S_SOURCE_PATH" ]; then
     # Locate Kubernetes in package directory
     CI_K8S_SOURCE_PATH="./${CI_PACKAGE_PATH}/ops/config/kubernetes"
 
-    # Check if package Kubernetes config directory exist, otherwise default to root ops directory
+    # Check if there are files in the directory, otherwise default to root ops directory
     if [ ! -n "$(ls -A $CI_K8S_SOURCE_PATH 2>/dev/null)" ]; then
-        CI_K8S_SOURCE_PATH="./ops/config/kubernetes"
-    else
-        CI_K8S_SOURCE_PATH="__UNDEFINED__"
+        
+        CI_K8S_SOURCE_PATH_NEW="./ops/config/kubernetes"
+        echo "INFO: Directory '${CI_K8S_SOURCE_PATH} is empty. Using '${CI_K8S_SOURCE_PATH_NEW}'."
+
+        CI_K8S_SOURCE_PATH=$CI_K8S_SOURCE_PATH_NEW
     fi
 fi
 
