@@ -1,0 +1,115 @@
+##########################################################################################
+#
+#  Default GitHub Actions workflow
+#
+#
+#  DESCRIPTION
+#  - One package
+#  - Docker Build & Push
+#  - Kubernetes Deployment
+#
+#  REQUIREMENTS
+#  - Secret environment variable (CI_KUBE_CONFIG) for Kubernetes kube-config
+#  - Secret environment variable (CI_REPOSITORY_USERNAME) for Container Registry username
+#  - Secret environment variable (CI_REPOSITORY_PASSWORD) for Container Registry password
+#
+#  SETUP
+#  1. Copy this file to .github/workflows/default.yml
+#  2. Define what branches GitHub Action should trigger a build for
+#  3. Define what paths GitHub Actions should trigger a build for
+#  4. Define required environment variables as explained in README.md
+#
+##########################################################################################
+
+name: "Sydnod CI Default"
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+
+    paths:
+      - "ops/ci/**"
+      - ".github/workflows/default.yaml"
+      - "src/**"
+
+env:
+  # Environment
+  CI_ENVIRONMENT: development
+
+  # Container Registry
+  CI_REPOSITORY_NAME: package-name
+  CI_REPOSITORY_HOSTNAME: "sydnodcreuw1.azurecr.io"
+  CI_REPOSITORY_USERNAME: ${{ secrets.CI_REPOSITORY_USERNAME }}
+  CI_REPOSITORY_PASSWORD: ${{ secrets.CI_REPOSITORY_PASSWORD }}
+
+  # Kubernetes
+  CI_K8S_NAMESPACE_NAME: package-name
+
+jobs:
+  deploy:
+    name: Deploy
+    env:
+      CI_PACKAGE_NAME: "web"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
+
+      #
+      # Sydnod CI: Bootstrap
+      #
+      - name: CI Bootstrap
+        run: chmod -R +x ./ops/ci/scripts && ./ops/ci/scripts/bootstrap.sh
+
+      # Set the target AKS cluster
+      - name: Login to Kubernetes
+        uses: azure/k8s-set-context@v1
+        with:
+          kubeconfig: ${{ secrets.CI_KUBE_CONFIG }}
+
+      # Login to Container Registry
+      - name: Login to Docker Container Registry (CR)
+        uses: Azure/docker-login@v1
+        with:
+          login-server: ${{ env.CI_REPOSITORY_HOSTNAME }}
+          username: ${{ env.CI_REPOSITORY_USERNAME }}
+          password: ${{ env.CI_REPOSITORY_PASSWORD }}
+
+      # Build Docker image
+      - name: Build Docker image
+        run: docker build
+          -f ./ops/Dockerfile
+          -t "${CI_REPOSITORY_IMAGE_PATH_FULL}"
+          --build-arg CI_ENVIRONMENT=${{ env.CI_ENVIRONMENT }}
+          ./src
+
+      # Push Docker image
+      - name: Push Docker image to CR
+        run: docker push ${CI_REPOSITORY_IMAGE_PATH_FULL}
+
+      # Create secret
+      - name: Create a CR secret in Kubernetes
+        uses: Azure/k8s-create-secret@v1
+        with:
+          namespace: ${{ env.CI_K8S_NAMESPACE_NAME }}
+          container-registry-url: ${{ env.CI_REPOSITORY_HOSTNAME }}
+          container-registry-username: ${{ env.CI_REPOSITORY_USERNAME }}
+          container-registry-password: ${{ env.CI_REPOSITORY_PASSWORD }}
+          secret-name: ${{ env.CI_K8S_REPOSITORY_SECRET_NAME }}
+
+      # Deply to Kubernetes
+      - name: Deploy to Kubernetes
+        uses: Azure/k8s-deploy@v1
+        with:
+          namespace: ${{ env.CI_K8S_NAMESPACE_NAME }}
+          manifests: |
+            ${{ env.CI_K8S_GENERATED_MANIFESTS_FILE }}
+          images: |
+            ${{ env.CI_REPOSITORY_IMAGE_PATH_FULL }}
+          imagepullsecrets: |
+            ${{ env.CI_K8S_REPOSITORY_SECRET_NAME }}

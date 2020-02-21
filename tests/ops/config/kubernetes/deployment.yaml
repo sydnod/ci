@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ${CI_K8S_SERVICE_NAME}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: "50%"
+      maxSurge: "100%"
+  template:
+    metadata:
+      labels:
+        component: ${CI_K8S_SERVICE_NAME}
+    spec:
+      containers:
+        - name: ${CI_K8S_SERVICE_NAME}
+          image: ${CI_REPOSITORY_IMAGE_PATH_NO_TAG}
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: "/"
+              port: http
+              scheme: "HTTP"
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 3
+          ports:
+            - name: http
+              containerPort: 80

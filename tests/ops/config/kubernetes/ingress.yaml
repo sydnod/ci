@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ${CI_K8S_SERVICE_NAME}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+  labels:
+    component: ${CI_K8S_SERVICE_NAME}
+spec:
+  tls:
+    - hosts:
+        - ${CI_APP_HOSTNAME_PREFIX}ci.sydnod.net
+      secretName: sydnod-ci-tls-${CI_APP_ENVIRONMENT_SHORT}
+  rules:
+    - host: ${CI_APP_HOSTNAME_PREFIX}ci.sydnod.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ${CI_K8S_SERVICE_NAME}
+              servicePort: http

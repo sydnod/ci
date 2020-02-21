@@ -1,0 +1,18 @@
+{
+  "name": "ci",
+  "version": "0.0.1",
+  "description": "Sydnod CI",
+  "author": "Johan Eliasson <johan@sydnod.com>",
+  "scripts": {
+    "--     CI     --": "",
+    "--    Azure   --": "",
+    "az:aks:get-credentials": "./scripts/helpers/az.sh",
+    "--    GitHub  --": "",
+    "--  Travis CI --": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sydnod/ci.git"
+  },
+  "license": "MIT"
+}
