@@ -6,7 +6,7 @@ on:
       - master
 
     paths:
-      - "ops/ci/scripts/prepare.sh"
+      - "ops/ci/**"
       - ".github/workflows/master.yaml"
       - "tests/**"
 
