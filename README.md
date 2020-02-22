@@ -11,7 +11,8 @@ It currently supports GitHub Actions, meaning that the generated output environm
 ### Requirements
 
 - **In general**: Code placed in a GitHub repository
-- **For Kubernetes deployment**: Login credentials to Container Registry and e.g. `KUBE_CONFIG` as Kubernetes credentials.
+- **For Docker build and push**: Login credentials to Container Registry
+- **For Kubernetes deployment**: Login credentials to Kubernetes cluster, e.g. `KUBE_CONFIG`.
 
 ### Setup
 
@@ -27,7 +28,7 @@ git submodule add https://github.com/sydnod/ci ops/ci
 git submodule add -b dev https://github.com/sydnod/ci ops/ci
 
 # If you already have a ops/ directory, force it
-git submodule add --name ci --force https://github.com/sydnod/ci ops/ci
+git submodule add --name ops/ci --force https://github.com/sydnod/ci ops/ci
 ```
 
 2. Create root directory `.github` with a subfolder `workflows`, resulting in `.github/workflows/`.
@@ -81,7 +82,7 @@ Container Registry variables, if you plan to build and push a Docker image.
 
 ### Kubernetes
 
-Kubernetes variables, if you plan to deploy to Kubernetes.
+Kubernetes variables, if you plan to deploy to Kubernetes. See [example templates](templates/config/kubernetes).
 
 | Name                              | Type       | Default examples                           | Description                                  |
 | --------------------------------- | ---------- | ------------------------------------------ | -------------------------------------------- |
@@ -107,17 +108,17 @@ All `*.yaml` and `*.yml` files that reside in the Kubernetes source directory (`
 
 ### Example
 
-Considering the following environment variables to defined during build
+Considering the following environment variables being defined during build:
 
 ```yaml
 CI_PACKAGE_NAME: "web"
 CI_ENVIRONMENT: "development"
-MY_DOMAIN: "example.com"
+DOMAIN: "example.com"
 ```
 
 **Source file**
 
-`web/ops/config/kubernetes/ingress.yaml` having the following;
+`web/ops/config/kubernetes/ingress.yaml` having the following:
 
 ```yaml
 apiVersion: extensions/v1beta1
@@ -127,10 +128,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ${CI_APP_HOSTNAME_PREFIX}${MY_DOMAIN}
-      secretName: ${MY_DOMAIN}-tls-${CI_APP_ENVIRONMENT_SHORT}
+        - ${CI_APP_HOSTNAME_PREFIX}${DOMAIN}
+      secretName: ${DOMAIN}-tls-${CI_APP_ENVIRONMENT_SHORT}
   rules:
-    - host: ${CI_APP_HOSTNAME_PREFIX}${MY_DOMAIN}
+    - host: ${CI_APP_HOSTNAME_PREFIX}${DOMAIN}
       http:
         paths:
           - path: /
@@ -141,7 +142,7 @@ spec:
 
 **Destination manifest**
 
-`web/ops/config/kubernetes/manifests.yaml` would output;
+`web/ops/config/kubernetes/manifests.yaml` would contain:
 
 ```yaml
 apiVersion: extensions/v1beta1
@@ -166,7 +167,11 @@ spec:
 # ...
 ```
 
-As you can see, we were using some variables that was `computed` by this sub-module.
+As you can see, we were using some variables that was `computed` by this sub-module. Bottom line: You can use any environment variable you want.
+
+### Templates
+
+See [example Kubernetes templates](templates/config/kubernetes).
 
 ## Build status
 
