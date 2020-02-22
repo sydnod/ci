@@ -1,4 +1,4 @@
-# Sydnod - Continuous Integration
+# Continuous Integration
 
 [![master](https://github.com/sydnod/ci/workflows/master/badge.svg)](https://github.com/sydnod/ci/actions?query=workflow%3Amaster) [![dev](https://github.com/sydnod/ci/workflows/dev/badge.svg)](https://github.com/sydnod/ci/actions?query=workflow%3Adev)
 
@@ -11,7 +11,7 @@ It currently supports GitHub Actions, meaning that the generated output environm
 ### Requirements
 
 - **In general**: Code placed in a GitHub repository
-- **For Kubernetes deployment**: Login credentials to Container Registry and e.g. KUBE_CONFIG as Kubernetes credentials.
+- **For Kubernetes deployment**: Login credentials to Container Registry and e.g. `KUBE_CONFIG` as Kubernetes credentials.
 
 ### Setup
 
@@ -49,51 +49,124 @@ CI_ENVIRONMENT: "development"
 
 ### Package
 
-| Name            | Type       | Default | Description                               |
-| --------------- | ---------- | ------- | ----------------------------------------- |
-| CI_PACKAGE_NAME | `required` | `web`   | Package name, e.g. `web` or `backend`     |
-| CI_PACKAGE_PATH | `optional` | `web/`  | Default location to the package root path |
+Package environment variables, such as package name and it's path.
+
+| Name              | Type       | Default examples | Description                               |
+| ----------------- | ---------- | ---------------- | ----------------------------------------- |
+| `CI_PACKAGE_NAME` | `required` | `web`            | Package name, e.g. `web` or `backend`     |
+| `CI_PACKAGE_PATH` | `optional` | `web/`           | Default location to the package root path |
 
 ### Application
 
-| Name                     | Type       | Default examples | Description                                                                        |
-| ------------------------ | ---------- | ---------------- | ---------------------------------------------------------------------------------- |
-| CI_ENVIRONMENT           | `required` | `development`    | Environment name (`production`, `development`, `stage` or `local`)                 |
-| CI_APP_ENVIRONMENT       | `computed` | `development`    | Alias to `CI_APP_ENVIRONMENT`                                                      |
-| CI_APP_ENVIRONMENT_SHORT | `computed` | `dev`            | A short-handed version of `CI_APP_ENVIRONMENT` (`prod`, `dev`, `stage` or `local`) |
-| CI_APP_HOSTNAME_PREFIX   | `computed` | `dev.`           | A hostname prefix for the environment (`<null>`, `dev.`, `stage.` or `local.`)     |
+Application environment variables, such as runtime environment.
+
+| Name                       | Type       | Default examples | Description                                                                        |
+| -------------------------- | ---------- | ---------------- | ---------------------------------------------------------------------------------- |
+| `CI_ENVIRONMENT`           | `required` | `development`    | Environment name (`production`, `development`, `stage` or `local`)                 |
+| `CI_APP_ENVIRONMENT`       | `computed` | `development`    | Alias to `CI_APP_ENVIRONMENT`                                                      |
+| `CI_APP_ENVIRONMENT_SHORT` | `computed` | `dev`            | A short-handed version of `CI_APP_ENVIRONMENT` (`prod`, `dev`, `stage` or `local`) |
+| `CI_APP_HOSTNAME_PREFIX`   | `computed` | `dev.`           | A hostname prefix for the environment (`<null>`,`dev.`,`stage.`or`local.`)         |
 
 ### Container Registry
 
-| Name                            | Type       | Default examples                            | Description                                          |
-| ------------------------------- | ---------- | ------------------------------------------- | ---------------------------------------------------- |
-| CI_REPOSITORY_NAME              | `optional` | `web`                                       | Name of the Container Registry repository            |
-| CI_REPOSITORY_IMAGE_TAG_PREFIX  | `optional` | `web`                                       | Prefix of image tag, e.g. `web`                      |
-| CI_REPOSITORY_IMAGE_TAG         | `computed` | `web-dev-200221-7ccba6e`                    | Generated image tag                                  |
-| CI_REPOSITORY_IMAGE_PATH_FULL   | `computed` | `cr.sydnod.net/ci:web-dev-20200221-7ccba6e` | Full path to Container Registry image                |
-| CI_REPOSITORY_IMAGE_PATH_NO_TAG | `computed` | `cr.sydnod.net/ci`                          | Full path to Container Registry image, excluding tag |
+Container Registry variables, if you plan to build and push a Docker image.
+
+| Name                              | Type       | Default examples                            | Description                                          |
+| --------------------------------- | ---------- | ------------------------------------------- | ---------------------------------------------------- |
+| `CI_REPOSITORY_NAME`              | `optional` | `web`                                       | Name of the Container Registry repository            |
+| `CI_REPOSITORY_IMAGE_TAG_PREFIX`  | `optional` | `web`                                       | Prefix of image tag, e.g.`web`                       |
+| `CI_REPOSITORY_IMAGE_TAG`         | `computed` | `web-dev-200221-7ccba6e`                    | Generated image tag                                  |
+| `CI_REPOSITORY_IMAGE_PATH_FULL`   | `computed` | `cr.sydnod.net/ci:web-dev-20200221-7ccba6e` | Full path to Container Registry image                |
+| `CI_REPOSITORY_IMAGE_PATH_NO_TAG` | `computed` | `cr.sydnod.net/ci`                          | Full path to Container Registry image, excluding tag |
 
 ### Kubernetes
 
-| Name                            | Type       | Default examples                           | Description                                  |
-| ------------------------------- | ---------- | ------------------------------------------ | -------------------------------------------- |
-| CI_K8S_SERVICE_NAME             | `optional` | `web-dev`                                  | Kubernetes service name                      |
-| CI_K8S_NAMESPACE_NAME           | `optional` | `web`                                      | Kubernetes namespace to deploy resources in  |
-| CI_K8S_SOURCE_PATH              | `optional` | `web/ops/config/kubernetes/`               | Source directory for Kubernetes declarations |
-| CI_K8S_GENERATED_MANIFESTS_FILE | `computed` | `web/ops/config/kubernetes/manifests.yaml` | Generated Kubernetes manifest                |
-| CI_K8S_REPOSITORY_SECRET_NAME   | `computed` | `web-container-registry`                   | Generated secret name for Container Registry |
+Kubernetes variables, if you plan to deploy to Kubernetes.
+
+| Name                              | Type       | Default examples                           | Description                                  |
+| --------------------------------- | ---------- | ------------------------------------------ | -------------------------------------------- |
+| `CI_K8S_SERVICE_NAME`             | `optional` | `web-dev`                                  | Kubernetes service name                      |
+| `CI_K8S_NAMESPACE_NAME`           | `optional` | `web`                                      | Kubernetes namespace to deploy resources in  |
+| `CI_K8S_SOURCE_PATH`              | `optional` | `web/ops/config/kubernetes/`               | Source directory for Kubernetes declarations |
+| `CI_K8S_GENERATED_MANIFESTS_FILE` | `computed` | `web/ops/config/kubernetes/manifests.yaml` | Generated Kubernetes manifest                |
+| `CI_K8S_REPOSITORY_SECRET_NAME`   | `computed` | `web-container-registry`                   | Generated secret name for Container Registry |
 
 ### Helpers
 
-| Name                | Type       | Default examples          | Description                          |
-| ------------------- | ---------- | ------------------------- | ------------------------------------ |
-| CI_DATE_YYYYMMDD    | `computed` | `20200221`                | Today's date                         |
-| CI_COMMIT_SHA       | `computed` | `7ccba6e88d2fc15399[...]` | Git SHA that trigged the CI workflow |
-| CI_COMMIT_SHA_SHORT | `optional` | `7ccba6e`                 | Short version of the Git SHA         |
+Helper variables, such as Git SHA and current date.
+
+| Name                  | Type       | Default examples          | Description                          |
+| --------------------- | ---------- | ------------------------- | ------------------------------------ |
+| `CI_DATE_YYYYMMDD`    | `computed` | `20200221`                | Today's date                         |
+| `CI_COMMIT_SHA`       | `computed` | `7ccba6e88d2fc15399[...]` | Git SHA that trigged the CI workflow |
+| `CI_COMMIT_SHA_SHORT` | `computed` | `7ccba6e`                 | Short version of the Git SHA         |
 
 ## Kubernetes Deployments
 
-Work in progress
+All `*.yaml` and `*.yml` files that reside in the Kubernetes source directory (`$CI_K8S_SOURCE_PATH`) will be parsed and merged into one `manifests.yaml` file. Before these files are merged, variables are parsed into the corresponding environment variable.
+
+### Example
+
+Considering the following environment variables to defined during build
+
+```yaml
+CI_PACKAGE_NAME: "web"
+CI_ENVIRONMENT: "development"
+MY_DOMAIN: "example.com"
+```
+
+**Source file**
+
+`web/ops/config/kubernetes/ingress.yaml` having the following;
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ${CI_K8S_SERVICE_NAME}
+spec:
+  tls:
+    - hosts:
+        - ${CI_APP_HOSTNAME_PREFIX}${MY_DOMAIN}
+      secretName: ${MY_DOMAIN}-tls-${CI_APP_ENVIRONMENT_SHORT}
+  rules:
+    - host: ${CI_APP_HOSTNAME_PREFIX}${MY_DOMAIN}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ${CI_K8S_SERVICE_NAME}
+              servicePort: http
+```
+
+**Destination manifest**
+
+`web/ops/config/kubernetes/manifests.yaml` would output;
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: web-dev
+spec:
+  tls:
+    - hosts:
+        - dev.example.com
+      secretName: example.com-tls-dev
+  rules:
+    - host: dev.example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: web-dev
+              servicePort: http
+---
+# Remaining Kubernetes files found in web/ops/config/kubernetes
+# ...
+```
+
+As you can see, we were using some variables that was `computed` by this sub-module.
 
 ## Build status
 
@@ -107,6 +180,12 @@ We strive to keep the `master` stable with backwards compatibility. You can see 
 ## Contribution
 
 Feel free to send Pull Requests with code that makes things better ❤️
+
+## Feature roadmap
+
+- Make test suits
+- Make compatible with TravisCI, Azure Pipelines etc
+- Add CI provider templates
 
 ## License
 
