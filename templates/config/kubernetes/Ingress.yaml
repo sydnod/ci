@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ${CI_PACKAGE_NAME}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  tls:
+    - hosts:
+        - ci.sydnod.net
+      secretName: ${CI_PACKAGE_NAME}-tls
+  rules:
+    - host: ci.sydnod.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ${CI_PACKAGE_NAME}
+              servicePort: 80

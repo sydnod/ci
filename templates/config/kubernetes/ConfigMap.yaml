@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ${CI_PACKAGE_NAME}-config
+  labels:
+    app: ${CI_PACKAGE_NAME}
+data:
+  CI_RANDOM_DATA: "foo"
+  
+  foo.txt: |
+    # Some text in foo.txt

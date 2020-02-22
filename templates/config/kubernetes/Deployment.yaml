@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ${CI_PACKAGE_NAME}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ${CI_PACKAGE_NAME}
+    spec:
+      initContainers:
+
+        - name: ${CI_PACKAGE_NAME}-init-container
+          image: busybox
+          command: ["ls", "-lA", "/"]
+          volumeMounts:
+            - mountPath: /ci/data
+              name: ${CI_PACKAGE_NAME}-data
+      containers:
+        - name: ${CI_PACKAGE_NAME}
+          image: galexrt/healthchecks:latest
+          resources:
+            requests:
+              memory: "10Mi"
+              cpu: "50m"
+            limits:
+              memory: "100Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 80
+          env:
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: ${CI_PACKAGE_NAME}-config
+                  key: HOST
+
+          volumeMounts:
+            - mountPath: /ci/data
+              name: ${CI_PACKAGE_NAME}-data
+
+      volumes:
+        - name: ${CI_PACKAGE_NAME}-data
+          persistentVolumeClaim:
+            claimName: ${CI_PACKAGE_NAME}-data-pvc
