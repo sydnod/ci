@@ -258,6 +258,10 @@ echo CI_K8S_GENERATED_MANIFESTS_FILE
 echo $CI_K8S_GENERATED_MANIFESTS_FILE
 echo
 
+echo CI_K8S_REPOSITORY_SECRET_NAME
+echo $CI_K8S_REPOSITORY_SECRET_NAME
+echo
+
 echo "==========================================================================="
 echo "=> Kubernetes generated manifest                                           "
 echo "==========================================================================="
