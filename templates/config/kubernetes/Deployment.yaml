@@ -10,16 +10,21 @@ spec:
         app: ${CI_PACKAGE_NAME}
     spec:
       initContainers:
-
         - name: ${CI_PACKAGE_NAME}-init-container
           image: busybox
-          command: ["ls", "-lA", "/"]
+          command: ["find", "/var/www"]
           volumeMounts:
-            - mountPath: /ci/data
+            - mountPath: /var/www/html
               name: ${CI_PACKAGE_NAME}-data
+
+      volumes:
+        - name: ${CI_PACKAGE_NAME}-data
+          persistentVolumeClaim:
+            claimName: ${CI_PACKAGE_NAME}-data-pvc
+            
       containers:
         - name: ${CI_PACKAGE_NAME}
-          image: galexrt/healthchecks:latest
+          image: nginx
           resources:
             requests:
               memory: "10Mi"
@@ -29,18 +34,12 @@ spec:
               cpu: "250m"
           ports:
             - containerPort: 80
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: ${CI_PACKAGE_NAME}-data
           env:
             - name: HOST
               valueFrom:
                 configMapKeyRef:
                   name: ${CI_PACKAGE_NAME}-config
                   key: HOST
-
-          volumeMounts:
-            - mountPath: /ci/data
-              name: ${CI_PACKAGE_NAME}-data
-
-      volumes:
-        - name: ${CI_PACKAGE_NAME}-data
-          persistentVolumeClaim:
-            claimName: ${CI_PACKAGE_NAME}-data-pvc

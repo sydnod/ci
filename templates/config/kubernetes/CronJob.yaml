@@ -1,0 +1,37 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: ${CI_PACKAGE_NAME}
+spec:
+  schedule: "*/5 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: ${CI_PACKAGE_NAME}-data
+              persistentVolumeClaim:
+                claimName: ${CI_PACKAGE_NAME}-data-pvc
+
+          containers:
+            - name: ${CI_PACKAGE_NAME}-prepare
+              image: busybox
+              volumeMounts:
+                - name: ${CI_PACKAGE_NAME}-data
+                  mountPath: /var/www/html
+              args:
+                - /bin/sh
+                - -c
+                - date; echo "Hello from CronJob"
+
+            - name: ${CI_PACKAGE_NAME}-test
+              image: alpine
+              resources:
+                requests:
+                  memory: "12Mi"
+                  cpu: "25m"
+                limits:
+                  memory: "24Mi"
+                  cpu: "100m"
