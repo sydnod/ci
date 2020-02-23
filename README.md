@@ -4,7 +4,7 @@
 
 This is a Continuous Integration (CI) Git module maintained by [Sydnod](https://sydnod.com). It aims to be a drop-in package for projects that want to enable a CI in a simple way.
 
-It's basically a Git Sub-module that contains a set of CI workflow templates, some scripts that provides helper environment variables and merges Kubernetes declarations into one `manifests.yaml` file. Before these files are merged, variables are parsed into the corresponding environment variable, e.g. `${FOO}` becomes `bar`, if `export FOO=bar` was executed during build.
+It's basically a Git Sub-module that contains a set of CI workflow templates, some scripts that provides helper environment variables and merges Kubernetes declarations into one `manifests.yaml` file. Before these files are merged, variables are parsed into the corresponding environment variable.
 
 It currently supports GitHub Actions, meaning that the generated output environment variables are somewhat built around the Github Action's build environments. However, this can and will easily be extended by adding bootstrap providers. Feel free to raise a Feature request.
 
@@ -21,14 +21,7 @@ Sounds good? Here's the plan:
 1. Add this repository as a submodule into the root directory `ops/ci`
 
 ```bash
-# Use stable (master)
 git submodule add https://github.com/sydnod/ci ops/ci
-
-# Use latest (dev)
-git submodule add -b dev https://github.com/sydnod/ci ops/ci
-
-# If you already have a ops/ directory, force it
-git submodule add --name ops/ci --force https://github.com/sydnod/ci ops/ci
 ```
 
 2. Create root directory `.github` with a subfolder `workflows`, resulting in `.github/workflows/`.
@@ -118,7 +111,7 @@ DOMAIN: "example.com"
 
 **Source file**
 
-`web/ops/config/kubernetes/ingress.yaml` having the following:
+`web/ops/config/kubernetes/Ingress.yaml` having the following:
 
 ```yaml
 apiVersion: extensions/v1beta1
@@ -167,7 +160,7 @@ spec:
 # ...
 ```
 
-As you can see, we were using some variables that was `computed` by this sub-module. Bottom line: You can use any environment variable you want.
+As you probably noticed, we were using some variables that was `computed` by this sub-module. Bottom line: You can use any environment variable you want.
 
 ### Templates
 
