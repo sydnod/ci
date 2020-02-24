@@ -14,9 +14,6 @@ env:
   # Environment
   CI_ENVIRONMENT: development
 
-  # Codecov
-  CODECOV_TOKEN: "32cca977-d484-4d41-ba41-a6ff7828924c"
-
 jobs:
   test:
     name: Test
@@ -41,10 +38,6 @@ jobs:
       # Bootstrap
       - name: CI Bootstrap
         run: chmod -R +x ./scripts && ./scripts/bootstrap.sh
-
-      # Codecov
-      - name: Codecov Report
-        run: bash <(curl -s https://codecov.io/bash)
 
       # Test Bootstrap CI script
       - name: CI Bootstrap Tests
