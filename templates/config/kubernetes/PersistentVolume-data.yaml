@@ -1,0 +1,14 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: ${CI_PACKAGE_NAME}-data-pv
+  labels:
+    app: ${CI_PACKAGE_NAME}
+spec:
+  storageClassName: default
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/www/html"
