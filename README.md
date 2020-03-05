@@ -89,11 +89,13 @@ Kubernetes variables, if you plan to deploy to Kubernetes. See [example template
 
 Helper variables, such as Git SHA and current date.
 
-| Name                  | Type       | Default examples          | Description                          |
-| --------------------- | ---------- | ------------------------- | ------------------------------------ |
-| `CI_DATE_YYYYMMDD`    | `computed` | `20200221`                | Today's date                         |
-| `CI_COMMIT_SHA`       | `computed` | `7ccba6e88d2fc15399[...]` | Git SHA that trigged the CI workflow |
-| `CI_COMMIT_SHA_SHORT` | `computed` | `7ccba6e`                 | Short version of the Git SHA         |
+| Name                       | Type       | Default examples          | Description                          |
+| -------------------------- | ---------- | ------------------------- | ------------------------------------ |
+| `CI_VERSION`               | `computed` | `0.0.4`                   | Sydnod CI version                    |
+| `CI_BOOTSTRAP_SCRIPT_PATH` | `computed` | `ops/ci/scripts`          | Path to Sydnod CI's script path      |
+| `CI_DATE_YYYYMMDD`         | `computed` | `20200221`                | Today's date                         |
+| `CI_COMMIT_SHA`            | `computed` | `7ccba6e88d2fc15399[...]` | Git SHA that trigged the CI workflow |
+| `CI_COMMIT_SHA_SHORT`      | `computed` | `7ccba6e`                 | Short version of the Git SHA         |
 
 ## Kubernetes Deployments
 
@@ -104,8 +106,12 @@ All `*.yaml` and `*.yml` files that reside in the Kubernetes source directory (`
 Considering the following environment variables being defined during build:
 
 ```yaml
-CI_PACKAGE_NAME: "web"
+# Sydnod CI specific
 CI_ENVIRONMENT: "development"
+CI_PACKAGE_NAME: "web"
+CI_K8S_NAMESPACE_NAME: "sydnod-ci-example"
+
+# Application example
 DOMAIN: "example.com"
 ```
 
@@ -118,6 +124,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ${CI_K8S_SERVICE_NAME}
+  namespace: ${CI_K8S_NAMESPACE_NAME}
 spec:
   tls:
     - hosts:
@@ -142,6 +149,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: web-dev
+  namespace: sydnod-ci-example
 spec:
   tls:
     - hosts:
@@ -164,7 +172,7 @@ As you probably noticed, we were using some variables that was `computed` by thi
 
 ### Templates
 
-See [example Kubernetes templates](templates/config/kubernetes).
+See example [Kubernetes templates](templates/config/kubernetes).
 
 ## Build status
 
@@ -181,7 +189,8 @@ Feel free to send Pull Requests with code that makes things better ❤️
 
 ## Feature roadmap
 
-- Make test suits
+- ~~Make test suits~~
+  - Make more test suits
 - Make compatible with TravisCI, Azure Pipelines etc
 - Add CI provider templates
 
