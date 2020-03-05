@@ -13,13 +13,6 @@ if [ -z "$CI_K8S_NAMESPACE_NAME" ]; then
 fi
 
 #
-# Helper variables
-#
-# Date
-export CI_DATE_YYYYMMDD=$(date '+%Y%m%d')
-echo ::set-env name=CI_DATE_YYYYMMDD::$CI_DATE_YYYYMMDD
-
-#
 # Source variables
 #
 # Commit SHA
@@ -29,6 +22,19 @@ echo ::set-env name=CI_COMMIT_SHA::$CI_COMMIT_SHA
 # Commit SHA (short)
 export CI_COMMIT_SHA_SHORT=$(echo ${GITHUB_SHA} | cut -c1-7)
 echo ::set-env name=CI_COMMIT_SHA_SHORT::$CI_COMMIT_SHA_SHORT
+
+#
+# Helper variables
+#
+# Script Path
+CI_BOOTSTRAP_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
+# Date
+export CI_DATE_YYYYMMDD=$(date '+%Y%m%d')
+echo ::set-env name=CI_DATE_YYYYMMDD::$CI_DATE_YYYYMMDD
+
+export CI_VERSION=$(/bin/bash ${CI_BOOTSTRAP_SCRIPT_PATH}/VERSION.sh)
+echo ::set-env name=CI_VERSION::$CI_VERSION
 
 #
 # Package variables
@@ -167,6 +173,21 @@ echo
 #
 # Output variables for debugging
 #
+
+echo "==========================================================================="
+echo "=                                                                          "
+echo "= Sydnod CI                                                                "
+echo "=                                                                          "
+echo "==========================================================================="
+echo
+
+echo CI_VERSION
+echo $CI_VERSION
+echo
+
+echo CI_BOOTSTRAP_SCRIPT_PATH
+echo $CI_BOOTSTRAP_SCRIPT_PATH
+echo
 
 echo "==========================================================================="
 echo "=> Helper variables                                                        "
