@@ -24,7 +24,7 @@ if [ -z "$CI_PACKAGE_NAME" ]; then
     exit 1
 fi
 
-if [ "$CI_DATE_YYYYMMDD" == "$(date '+%Y%m%d')" ]; then
-    echo "CI_DATE_YYYYMMDD: Should not be '$(date '+%Y%m%d')'."
+if [ "$CI_DATE_YYYYMMDD" != "$(date '+%Y%m%d')" ]; then
+    echo "CI_DATE_YYYYMMDD: Should be '$(date '+%Y%m%d')'."
     exit 1
 fi
