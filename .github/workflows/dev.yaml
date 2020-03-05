@@ -37,11 +37,11 @@ jobs:
 
       # Bootstrap
       - name: CI Bootstrap
-        run: chmod -R +x ./scripts && ./scripts/bootstrap.sh
+        run: /bin/bash ./scripts/bootstrap.sh
 
       # Test Bootstrap CI script
       - name: CI Bootstrap Tests
-        run: chmod -R +x ./tests/scripts && ./tests/scripts/bootstrap.sh
+        run: /bin/bash ./tests/scripts/bootstrap.sh
 
       # Set the target AKS cluster.
       - name: Login to Kubernetes
