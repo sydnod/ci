@@ -27,7 +27,8 @@ echo ::set-env name=CI_COMMIT_SHA_SHORT::$CI_COMMIT_SHA_SHORT
 # Helper variables
 #
 # Script Path
-CI_BOOTSTRAP_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+export CI_BOOTSTRAP_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+echo ::set-env name=CI_BOOTSTRAP_SCRIPT_PATH::$CI_BOOTSTRAP_SCRIPT_PATH
 
 # Date
 export CI_DATE_YYYYMMDD=$(date '+%Y%m%d')
