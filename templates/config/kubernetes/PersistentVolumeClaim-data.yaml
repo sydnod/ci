@@ -2,6 +2,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: ${CI_PACKAGE_NAME}-data-pvc
+  namespace: ${CI_K8S_NAMESPACE_NAME}
   labels:
     app: ${CI_PACKAGE_NAME}
 spec:
