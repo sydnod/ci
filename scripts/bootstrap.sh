@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Initial environment variable checks
 if [ -z "$CI_PACKAGE_NAME" ]; then

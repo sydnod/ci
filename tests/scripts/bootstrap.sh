@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # If we provide a argument, run the actual script
 if [ ! -z "$1" ]; then
