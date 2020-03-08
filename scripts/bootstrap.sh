@@ -82,7 +82,7 @@ case $CI_ENVIRONMENT in
     ;;
 
   *)
-    CI_APP_ENVIRONMENT=${CI_ENVIRONMENT}
+    CI_APP_ENVIRONMENT="unknown"
     CI_APP_ENVIRONMENT_SHORT="unknown"
     CI_APP_HOSTNAME_PREFIX="unknown."
     ;;
