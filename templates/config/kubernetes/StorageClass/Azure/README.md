@@ -1,4 +1,4 @@
-# Azure File Kubernetes Storage Driver
+# Azure Kubernetes (AKS)
 
 ## Storage Classes
 

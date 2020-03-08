@@ -63,6 +63,12 @@ case $CI_ENVIRONMENT in
     CI_APP_HOSTNAME_PREFIX="stage."
     ;;
 
+  test)
+    CI_APP_ENVIRONMENT=${CI_ENVIRONMENT}
+    CI_APP_ENVIRONMENT_SHORT="test"
+    CI_APP_HOSTNAME_PREFIX="test."
+    ;;
+
   development)
     CI_APP_ENVIRONMENT=${CI_ENVIRONMENT}
     CI_APP_ENVIRONMENT_SHORT="dev"
@@ -76,7 +82,7 @@ case $CI_ENVIRONMENT in
     ;;
 
   *)
-    CI_APP_ENVIRONMENT=${CI_ENVIRONMENT}
+    CI_APP_ENVIRONMENT="unknown"
     CI_APP_ENVIRONMENT_SHORT="unknown"
     CI_APP_HOSTNAME_PREFIX="unknown."
     ;;
