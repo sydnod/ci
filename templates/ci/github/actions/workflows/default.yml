@@ -65,7 +65,7 @@ jobs:
       # Sydnod CI: Bootstrap
       #
       - name: CI Bootstrap
-        run: chmod -R +x ./ops/ci/scripts && ./ops/ci/scripts/bootstrap.sh
+        run: /bin/bash ./scripts/bootstrap.sh
 
       # Set the target AKS cluster
       - name: Login to Kubernetes

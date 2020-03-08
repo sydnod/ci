@@ -16,12 +16,12 @@ spec:
           command: ["find", "/var/www"]
           volumeMounts:
             - mountPath: /var/www/html
-              name: ${CI_PACKAGE_NAME}-data
+              name: ${CI_PACKAGE_NAME}
 
       volumes:
-        - name: ${CI_PACKAGE_NAME}-data
+        - name: ${CI_PACKAGE_NAME}
           persistentVolumeClaim:
-            claimName: ${CI_PACKAGE_NAME}-data-pvc
+            claimName: ${CI_PACKAGE_NAME}-pvc
             
       containers:
         - name: ${CI_PACKAGE_NAME}
@@ -37,7 +37,7 @@ spec:
             - containerPort: 80
           volumeMounts:
             - mountPath: /var/www/html
-              name: ${CI_PACKAGE_NAME}-data
+              name: ${CI_PACKAGE_NAME}
           env:
             - name: HOST
               valueFrom:
