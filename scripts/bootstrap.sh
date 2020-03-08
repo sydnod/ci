@@ -51,19 +51,25 @@ echo ::set-env name=CI_PACKAGE_PATH::$CI_PACKAGE_PATH
 #
 case $CI_ENVIRONMENT in
 
-  production)
+  [prod/production] )
     CI_APP_ENVIRONMENT=${CI_ENVIRONMENT}
     CI_APP_ENVIRONMENT_SHORT="prod"
     CI_APP_HOSTNAME_PREFIX=""
     ;;
 
-  stage)
+  [stage/staging] )
     CI_APP_ENVIRONMENT=${CI_ENVIRONMENT}
     CI_APP_ENVIRONMENT_SHORT="stage"
     CI_APP_HOSTNAME_PREFIX="stage."
     ;;
 
-  development)
+  [test/testing] )
+    CI_APP_ENVIRONMENT=${CI_ENVIRONMENT}
+    CI_APP_ENVIRONMENT_SHORT="test"
+    CI_APP_HOSTNAME_PREFIX="test."
+    ;;
+
+  [dev/development] )
     CI_APP_ENVIRONMENT=${CI_ENVIRONMENT}
     CI_APP_ENVIRONMENT_SHORT="dev"
     CI_APP_HOSTNAME_PREFIX="dev."
