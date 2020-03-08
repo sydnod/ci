@@ -11,5 +11,3 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
-  hostPath:
-    path: "/var/www/html"
