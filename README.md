@@ -56,7 +56,7 @@ Application environment variables, such as runtime environment.
 
 | Name                       | Type       | Default examples | Description                                                                        |
 | -------------------------- | ---------- | ---------------- | ---------------------------------------------------------------------------------- |
-| `CI_ENVIRONMENT`           | `required` | `development`    | Environment name (`production`, `development`, `stage` or `local`)                 |
+| `CI_ENVIRONMENT`           | `required` | `development`    | Environment name (`production`, `stage`, `test`, `development` or `local`)         |
 | `CI_APP_ENVIRONMENT`       | `computed` | `development`    | Alias to `CI_APP_ENVIRONMENT`                                                      |
 | `CI_APP_ENVIRONMENT_SHORT` | `computed` | `dev`            | A short-handed version of `CI_APP_ENVIRONMENT` (`prod`, `dev`, `stage` or `local`) |
 | `CI_APP_HOSTNAME_PREFIX`   | `computed` | `dev.`           | A hostname prefix for the environment (`<null>`,`dev.`,`stage.`or`local.`)         |
