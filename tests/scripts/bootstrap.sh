@@ -28,3 +28,8 @@ if [ "$CI_DATE_YYYYMMDD" != "$(date '+%Y%m%d')" ]; then
     echo "CI_DATE_YYYYMMDD: Should be '$(date '+%Y%m%d')'."
     exit 1
 fi
+
+if [ "$CI_APP_ENVIRONMENT" != "$CI_ENVIRONMENT" ]; then
+    echo "CI_APP_ENVIRONMENT: Should not be the same as CI_ENVIRONMENT (${CI_APP_ENVIRONMENT} != ${CI_ENVIRONMENT})"
+    exit 1
+fi
