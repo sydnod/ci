@@ -166,7 +166,7 @@ then
     files=$(find $CI_K8S_SOURCE_PATH -regextype posix-extended -regex '^.*\.ya?ml' | sort)
 
     # Try to replace ${PLACEHOLDERS} with values from the ENV.
-    awk 'FNR==1 && NR!=1 {print "---"}{print}' $files | envsubst > $CI_K8S_SOURCE_PATH/manifests.yaml
+    awk 'FNR==1 && NR!=1 {print "---"}{print}' $files | envsubst "`printf '${%s} ' $(bash -c "compgen -A variable")`" > $CI_K8S_SOURCE_PATH/manifests.yaml
 else
     echo
     #echo "No Kubernetes config files present in ${CI_K8S_SOURCE_PATH}."
