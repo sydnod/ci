@@ -1,8 +1,11 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ${CI_K8S_SERVICE_NAME}
 spec:
+  selector:
+    matchLabels:
+      component: ${CI_K8S_SERVICE_NAME}
   replicas: 1
   strategy:
     type: RollingUpdate
