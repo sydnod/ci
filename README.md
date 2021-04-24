@@ -2,6 +2,8 @@
 
 [![master](https://github.com/sydnod/ci/workflows/master/badge.svg)](https://github.com/sydnod/ci/actions?query=workflow%3Amaster) [![dev](https://github.com/sydnod/ci/workflows/dev/badge.svg)](https://github.com/sydnod/ci/actions?query=workflow%3Adev)
 
+> :warning: This repository has been discontinued in favor of great tools out there, such as [Kustomize](https://github.com/kubernetes-sigs/kustomize) and [ArgoCD](https://github.com/argoproj/argo-cd). This repository will remain archived for now.
+
 This is a Continuous Integration (CI) Git module maintained by [Sydnod](https://sydnod.com). It aims to be a drop-in package for projects that want to enable a CI in a simple way.
 
 It's basically a Git Sub-module that contains a set of CI workflow templates, some scripts that provides helper environment variables and merges Kubernetes declarations into one `manifests.yaml` file. Before these files are merged, variables are parsed into the corresponding environment variable.
@@ -178,10 +180,10 @@ See example [Kubernetes templates](templates/config/kubernetes).
 
 We strive to keep the `master` stable with backwards compatibility. You can see the build status below, along with deployment tests.
 
-| Branch   | Build status                                                                                                                       | Deployment test                                        |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `master` | [![master](https://github.com/sydnod/ci/workflows/master/badge.svg)](https://github.com/sydnod/ci/actions?query=workflow%3Amaster) | [https://ci.sydnod.net](https://ci.sydnod.net)         |
-| `dev`    | [![dev](https://github.com/sydnod/ci/workflows/dev/badge.svg)](https://github.com/sydnod/ci/actions?query=workflow%3Adev)          | [https://dev.ci.sydnod.net](https://dev.ci.sydnod.net) |
+| Branch   | Build status                                                                                                                       |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `master` | [![master](https://github.com/sydnod/ci/workflows/master/badge.svg)](https://github.com/sydnod/ci/actions?query=workflow%3Amaster) |
+| `dev`    | [![dev](https://github.com/sydnod/ci/workflows/dev/badge.svg)](https://github.com/sydnod/ci/actions?query=workflow%3Adev)          |
 
 ## Contribution
 
